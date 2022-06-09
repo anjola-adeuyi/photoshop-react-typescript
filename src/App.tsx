@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import SidebarItem from './components/SidebarItem';
 import Slider from './components/Slider';
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
     <div className='container'>
       <div className='main-image' />
       <div className='sidebar'>
-        <Slider />
+        <SidebarItem />
+        <SidebarItem />
       </div>
       <Slider />
     </div>

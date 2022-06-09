@@ -21,7 +21,44 @@
 
 .sidebar {
   grid-area: sidebar;
-  background-color: purple;
+  background-color: hsl(265, 100%, 86%);
+  border-left: 1px solid hsl(265, 100%, 56%);
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.sidebar-item {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: hsl(265, 100%, 86%);
+  padding: 1rem;
+  position: relative;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar-item:hover,
+.sidebar-item:focus {
+  background-color: hsl(265, 100%, 76%);
+}
+
+.sidebar-item:active {
+  background-color: hsl(265, 100%, 66%);
+}
+
+.sidebar-item:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background-color: hsl(265, 100%, 46%);
+}
+
+.sidebar-item:last-child:after {
+  display: none;
 }
 
 .slider-container {
