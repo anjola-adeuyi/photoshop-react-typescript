@@ -43,8 +43,9 @@
   background-color: hsl(265, 100%, 76%);
 }
 
-.sidebar-item:active {
-  background-color: hsl(265, 100%, 66%);
+.sidebar-item.active {
+  color: #dadada;
+  background-color: hsl(265, 100%, 66%) !important;
 }
 
 .sidebar-item:after {

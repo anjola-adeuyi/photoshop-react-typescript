@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS: OptionsType[] = [
   },
   {
     name: 'Contrast',
-    property: 'constrast',
+    property: 'contrast',
     value: 100,
     range: {
       min: 0,
@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS: OptionsType[] = [
   },
   {
     name: 'Saturation',
-    property: 'saturation',
+    property: 'saturate',
     value: 100,
     range: {
       min: 0,
@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS: OptionsType[] = [
   },
   {
     name: 'Blur',
-    property: 'bur',
+    property: 'blur',
     value: 0,
     range: {
       min: 0,
@@ -94,22 +94,47 @@ function App() {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
   const selectedOption = options[selectedOptionIndex];
 
+  const handleSliderChange = (event: any) => {
+    const newOptions = options.map((option, index) => {
+      if (index === selectedOptionIndex) {
+        return {
+          ...option,
+          value: event.target.value,
+        };
+      }
+      return option;
+    });
+    setOptions(newOptions);
+  };
+
+  const getImageStyle = () => {
+    const filters = options.map((option) => {
+      return `${option.property}(${option.value}${option.unit})`;
+    });
+    return { filter: filters.join(' ') };
+  };
+
   return (
     <div className='container'>
-      <div className='main-image' />
+      <div className='main-image' style={getImageStyle()} />
       <div className='sidebar'>
         {options?.map((option, index) => {
           return (
             <SidebarItem
               key={index}
               name={option.name}
-              active={option.value === selectedOptionIndex}
+              active={index === selectedOptionIndex}
               handleClick={() => setSelectedOptionIndex(index)}
             />
           );
         })}
       </div>
-      <Slider />
+      <Slider
+        min={selectedOption.range.min}
+        max={selectedOption.range.max}
+        value={selectedOption.value}
+        handleChange={handleSliderChange}
+      />
     </div>
   );
 }
