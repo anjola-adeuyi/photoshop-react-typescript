@@ -6,7 +6,9 @@ function App() {
   return (
     <div className='container'>
       <div className='main-image' />
-      <div className='sidebar'> yes</div>
+      <div className='sidebar'>
+        <Slider />
+      </div>
       <Slider />
     </div>
   );
