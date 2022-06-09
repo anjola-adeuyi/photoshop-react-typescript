@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import SidebarItem from './components/SidebarItem';
 import Slider from './components/Slider';
+import * as htmlToImage from 'html-to-image';
+import * as download from 'downloadjs';
 
 const DEFAULT_OPTIONS: OptionsType[] = [
   {
@@ -91,7 +93,10 @@ export interface Range {
 
 function App() {
   const [options, setOptions] = useState<OptionsType[]>(DEFAULT_OPTIONS);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
+  const [selectedOptionIndex, setSelectedOptionIndex] =
+    useState<number>(Infinity);
+  const [image, setImage] = useState<null | string>(null);
+
   const selectedOption = options[selectedOptionIndex];
 
   const handleSliderChange = (event: any) => {
@@ -107,16 +112,40 @@ function App() {
     setOptions(newOptions);
   };
 
-  const getImageStyle = () => {
+  const applyFilters = () => {
     const filters = options.map((option) => {
       return `${option.property}(${option.value}${option.unit})`;
     });
-    return { filter: filters.join(' ') };
+    return {
+      filter: filters.join(' '),
+      backgroundImage: `url(${image})`,
+    };
+  };
+
+  const downloadImage = () => {
+    htmlToImage
+      .toPng(document.getElementById('image') as HTMLElement)
+      .then(function (dataUrl: any) {
+        download.default(dataUrl, `${Date.now()}.png`);
+      });
+  };
+
+  const handleImage = (event: any) => {
+    const objectUrl = URL.createObjectURL(event.target.files[0]);
+    setImage(objectUrl);
   };
 
   return (
     <div className='container'>
-      <div className='main-image' style={getImageStyle()} />
+      {image ? (
+        <div className='main-image' style={applyFilters()} id='image' />
+      ) : (
+        <div className='upload-image'>
+          <h1>Jola Photoshop Clone</h1>
+          <input type='file' accept='image/*' onChange={handleImage} />
+        </div>
+      )}
+
       <div className='sidebar'>
         {options?.map((option, index) => {
           return (
@@ -128,11 +157,14 @@ function App() {
             />
           );
         })}
+        <button className='download' onClick={downloadImage}>
+          Download
+        </button>
       </div>
       <Slider
-        min={selectedOption.range.min}
-        max={selectedOption.range.max}
-        value={selectedOption.value}
+        min={selectedOption?.range.min}
+        max={selectedOption?.range.max}
+        value={selectedOption?.value}
         handleChange={handleSliderChange}
       />
     </div>
